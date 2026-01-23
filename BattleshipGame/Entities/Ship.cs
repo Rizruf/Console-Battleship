@@ -12,7 +12,7 @@ namespace BattleshipGame.Entities
         public int Length { get;}
         public int Hit { get; private set; }
 
-        public List <Coordinate> coordinates { get; set; } = new List <Coordinate> ();
+        public List <Coordinate> Сoordinates { get; set; } = new List <Coordinate> ();
 
         public Ship(string name, int lengthShip)
         {
@@ -22,7 +22,7 @@ namespace BattleshipGame.Entities
 
         public bool GotHit(Coordinate shot)
         {
-            foreach (Coordinate position in coordinates)
+            foreach (Coordinate position in Сoordinates)
             {
                 if (shot.X == position.X && shot.Y == position.Y)
                 {
