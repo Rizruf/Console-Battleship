@@ -8,25 +8,42 @@ namespace BattleshipGame
     {
         static void Main(string[] args)
         {
-            Board myBoard = new Board();
+            BotPlayer bot = new BotPlayer();
 
-            Ship destroyer = new Ship("Destroyer", 2);
+            Console.Write("Введите имя - ");
 
-            myBoard.PlaceShip(destroyer, new Coordinate(1, 0), true);
+            HumanPlayer human = new HumanPlayer(Console.ReadLine());
 
-            Console.WriteLine("Стреляем в A1...");
-            myBoard.Fire(new Coordinate(0, 0));
+            human.OwnBoard.PlaceShip(new Ship("MyShip", 3), new Coordinate(0, 0), true);
 
-            Console.WriteLine("Стреляем в B1...");
-            myBoard.Fire(new Coordinate(1, 0));
+            bot.OwnBoard.PlaceShip(new Ship("BotShip", 3), new Coordinate(9, 2), true);
 
-            Console.WriteLine("Стреляем в B2...");
-            myBoard.Fire(new Coordinate(1, 1));
+            while (true)
+            {
+                Console.Clear();
 
-            Console.Clear(); 
-            ConsoleView.DrawBoard(myBoard);
+                Console.WriteLine("--- КАРТА БОТА (Стреляй сюда) ---");
+                ConsoleView.DrawBoard(bot.OwnBoard);
 
-            Console.ReadLine();
+   
+                Coordinate shot = human.Shot();
+
+
+                var result = bot.OwnBoard.Fire(shot);
+                Console.WriteLine($"Ты выстрелил в {shot.X},{shot.Y}. Результат: {result}");
+
+                Console.WriteLine("Нажми Enter для хода бота...");
+                Console.ReadLine();
+
+
+                Console.WriteLine("--- БОТ АТАКУЕТ ---");
+                Coordinate botShot = bot.Shot();
+                var botResult = human.OwnBoard.Fire(botShot);
+
+                Console.WriteLine($"Бот выстрелил в {botShot.X},{botShot.Y}. Результат: {botResult}");
+                Console.WriteLine("Нажми Enter...");
+                Console.ReadLine();
+            }
         }
     }
 }
