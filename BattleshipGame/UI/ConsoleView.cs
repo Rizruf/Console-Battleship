@@ -11,7 +11,7 @@ namespace BattleshipGame.UI
 {
     internal static class ConsoleView
     {
-        public static void DrawBoard(Board board)
+        public static void DrawBoards(Board board, bool hideShips = false)
         {
             Console.Write("   ");
             Console.WriteLine("A B C D E F G H I J");
@@ -31,20 +31,34 @@ namespace BattleshipGame.UI
                             Console.ForegroundColor = ConsoleColor.Blue;
                             Console.Write("~ ");
                             break;
+
                         case CellState.Ship:
-                            Console.ForegroundColor = ConsoleColor.Gray;
-                            Console.Write("O ");
+                            
+                            if (hideShips)
+                            {                             
+                                Console.ForegroundColor = ConsoleColor.Blue;
+                                Console.Write("~ ");
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Gray;
+                                Console.Write("■ ");
+                            }
                             break;
+
+                        
                         case CellState.Miss:
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write("x ");
+                            Console.ForegroundColor = ConsoleColor.Gray; 
+                            Console.Write("* ");
                             break;
+
                         case CellState.Hit:
                             Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.Write("Ж ");
+                            Console.Write("X ");
                             break;
+
                         case CellState.Sunk:
-                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.Write("W ");
                             break;
                     }

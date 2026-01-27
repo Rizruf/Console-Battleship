@@ -64,46 +64,64 @@ namespace BattleshipGame.GameEngine
             return CellState.Miss;
         }
 
-        public bool PlaceShip (Ship ship, Coordinate start, bool isVertical)
+        public bool PlaceShip(Ship ship, Coordinate start, bool isVertical)
         {
-            List <Coordinate> tempCords = new List <Coordinate>();
+            List<Coordinate> tempCoords = new List<Coordinate>();
+
 
             for (int i = 0; i < ship.Length; i++)
             {
-                int currentX = start.X;
-                int currentY = start.Y;
+                int x = start.X;
+                int y = start.Y;
 
-                if (isVertical) currentY = currentY + i;
-                else currentX = currentX + i;
+                if (isVertical) y += i;
+                else x += i;
 
-                tempCords.Add(new Coordinate (currentX, currentY));
+                tempCoords.Add(new Coordinate(x, y));
             }
 
-            foreach (Coordinate coordinate in tempCords)
+
+            foreach (var coord in tempCoords)
             {
-                if (coordinate.X > 9 || coordinate.Y > 9 || coordinate.X < 0 || coordinate.Y < 0)
-                {
-                    return false;
-                }
 
-                if (Map[coordinate.X, coordinate.Y] !=  CellState.Empty)
-                {
+                if (coord.X < 0 || coord.X > 9 || coord.Y < 0 || coord.Y > 9)
                     return false;
-                }
 
-                
+                if (!IsSpaceFree(coord.X, coord.Y))
+                    return false;
             }
 
-            foreach (Coordinate coordinate in tempCords)
+            foreach (var coord in tempCoords)
             {
-                Map[coordinate.X, coordinate.Y] = CellState.Ship;
-
-                ship.Сoordinates.Add(coordinate);
+                Map[coord.X, coord.Y] = CellState.Ship;
+                ship.Сoordinates.Add(coord);
             }
 
             Fleet.Add(ship);
-
             return true;
+        }
+
+        private bool IsSpaceFree(int x, int y)
+        {
+            for (int i = x - 1; i <= x + 1; i++)
+            {
+                for (int j = y - 1; j <= y + 1; j++)
+                {
+                    if (i >= 0 && i < 10 && j >= 0 && j < 10)
+                    {
+                        if (Map[i, j] == CellState.Ship)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        public bool IsLost()
+        {
+            return Fleet.All(s => s.IsSunk());
         }
     }
 }

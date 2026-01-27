@@ -8,42 +8,59 @@ namespace BattleshipGame
     {
         static void Main(string[] args)
         {
+            Console.Write("Введите имя: ");
+            HumanPlayer me = new HumanPlayer(Console.ReadLine());
             BotPlayer bot = new BotPlayer();
 
-            Console.Write("Введите имя - ");
-
-            HumanPlayer human = new HumanPlayer(Console.ReadLine());
-
-            human.OwnBoard.PlaceShip(new Ship("MyShip", 3), new Coordinate(0, 0), true);
-
-            bot.OwnBoard.PlaceShip(new Ship("BotShip", 3), new Coordinate(9, 2), true);
+            me.OwnBoard.SetupFleetRandomly();
+            bot.OwnBoard.SetupFleetRandomly();
 
             while (true)
             {
                 Console.Clear();
 
-                Console.WriteLine("--- КАРТА БОТА (Стреляй сюда) ---");
-                ConsoleView.DrawBoard(bot.OwnBoard);
+                Console.WriteLine($"--- ТВОЕ ПОЛЕ ({me.Name}) ---");
+                ConsoleView.DrawBoards(me.OwnBoard, hideShips: false);
 
-   
-                Coordinate shot = human.Shot();
+                Console.WriteLine();
 
+                
+                Console.WriteLine("--- ПОЛЕ ВРАГА ---");
+                ConsoleView.DrawBoards(bot.OwnBoard, hideShips: true);
 
+                
+                Coordinate shot = me.Shot();
                 var result = bot.OwnBoard.Fire(shot);
-                Console.WriteLine($"Ты выстрелил в {shot.X},{shot.Y}. Результат: {result}");
 
-                Console.WriteLine("Нажми Enter для хода бота...");
+               
+                if (bot.OwnBoard.IsLost())
+                {
+                    Console.Clear();
+                    Console.WriteLine("ПОБЕДА! Вражеский флот уничтожен!");
+                    break;
+                }
+
+                
+                Console.WriteLine($"Ты: {result}. Нажми Enter...");
                 Console.ReadLine();
 
-
-                Console.WriteLine("--- БОТ АТАКУЕТ ---");
+                
+                Console.WriteLine("Ход Бота...");
                 Coordinate botShot = bot.Shot();
-                var botResult = human.OwnBoard.Fire(botShot);
+                var botResult = me.OwnBoard.Fire(botShot);
 
-                Console.WriteLine($"Бот выстрелил в {botShot.X},{botShot.Y}. Результат: {botResult}");
-                Console.WriteLine("Нажми Enter...");
+                
+                if (me.OwnBoard.IsLost())
+                {
+                    Console.Clear();
+                    Console.WriteLine("ПОРАЖЕНИЕ! Твой флот пошел на дно.");
+                    break;
+                }
+
+                Console.WriteLine($"Бот бил в {botShot.X},{botShot.Y}: {botResult}. Enter...");
                 Console.ReadLine();
             }
         }
     }
+
 }
