@@ -3,7 +3,7 @@
 Классическая игра "Морской Бой", написанная на **C#** с упором на чистую архитектуру и принципы ООП.
 Проект реализует полноценный игровой цикл: расстановка кораблей, стрельба, логика бота и система "Тумана Войны".
 
-
+![Gameplay Preview](preview.png)
 ![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?style=flat&logo=dotnet)
 ![C#](https://img.shields.io/badge/C%23-100%25-239120?style=flat&logo=c-sharp)
 ![Architecture](https://img.shields.io/badge/Architecture-Layered-blueviolet)
